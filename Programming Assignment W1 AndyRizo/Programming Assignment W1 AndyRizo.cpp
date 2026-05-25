@@ -1,20 +1,68 @@
-// Programming Assignment W1 AndyRizo.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+
+//Andy Rizo ITCS-2530 Assignment 1
+
+
 
 #include <iostream>
+#include <string> // Useful as we will primarily use strings.
+
+using namespace std; // Removes tedious work
+
+
+/*
+
+The main purpose of this program will be to take in three inputs from the user, and output them back in a way that makes sense.
+For this scenario we will ask for a name, this can be a person place or thing, then we will ask for how to catagorize it, and then ask for a description.
+
+We are limited to three inputs only.
+
+No if, else, switch, for, or while functions.
+
+Use variables, cin, and cout only.
+
+
+*/
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    string name = "Empty";
+    string catagory = "Empty";
+    string description = "Empty";
+
+    
+
+    cout << "To begin, what is the name of the person, place, or thing that interests you?\n";
+    getline(std::cin, name);
+
+    cout << endl;
+
+    cout << "In one or two words, what is the topic or rather what would " << name << " be catagorized as:\n";
+    getline(std::cin, catagory);
+
+    cout << endl;
+
+    cout << "Now what should the description of " << name << " be, before saving the entry?\n";
+    getline(std::cin, description);
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+
+    cout << "Name: " << name;
+    cout << endl;
+
+    cout << "Catagory: " << catagory;
+    cout << endl;
+
+    cout << "Description: " << description;
+
+
+
+
+
+
+    return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+// Write this as the commit message "Commit for Week 01 programming assignment"
