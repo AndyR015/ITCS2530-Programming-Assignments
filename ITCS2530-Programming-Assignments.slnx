@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Programming Assignment W1 AndyRizo/Programming Assignment W1 AndyRizo.vcxproj" />
+</Solution>
