@@ -27,29 +27,29 @@ int main()
 {
     string name = "Empty";
     string catagory = "Empty";
-    string description = "Empty";
+    string description = "Empty"; //To check for errors, Empty is written.
 
     
 
-    cout << "To begin, what is the name of the person, place, or thing that interests you?\n";
+    cout << "To begin, what is the name of the person, place, or thing that interests you?\n"; //Ask for name
     getline(std::cin, name);
 
     cout << endl;
 
-    cout << "In one or two words, what is the topic or rather what would " << name << " be catagorized as:\n";
+    cout << "In one or two words, what is the topic or rather what would " << name << " be catagorized as:\n"; //Ask for catagory
     getline(std::cin, catagory);
 
     cout << endl;
 
-    cout << "Now what should the description of " << name << " be, before saving the entry?\n";
+    cout << "Now what should the description of " << name << " be, before saving the entry?\n"; //Ask for a description
     getline(std::cin, description);
 
     cout << endl;
     cout << endl;
     cout << endl;
 
-
-    cout << "Name: " << name;
+    //Final Results
+    cout << "Name: " << name; 
     cout << endl;
 
     cout << "Catagory: " << catagory;
@@ -57,10 +57,10 @@ int main()
 
     cout << "Description: " << description;
 
-
-
-
-
+    //To create space for the text to be visible.
+    cout << endl;
+    cout << endl;
+    cout << endl;
 
     return 0;
 }
