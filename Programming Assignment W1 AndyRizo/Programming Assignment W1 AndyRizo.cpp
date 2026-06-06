@@ -143,7 +143,7 @@ int main()
 
 
     //Final Results on the console
-    cout << "\t" << name << setw(24) << "( " << category << " )" << endl << endl;
+    cout << "\t" << name << setw(24) << "( " << category << " )" << right << endl << endl;
 
     cout << "\t" << "Age: " << setw(17) << age_years << " Years " << age_months << " Months " << age_days << " Days";
     cout << endl;
