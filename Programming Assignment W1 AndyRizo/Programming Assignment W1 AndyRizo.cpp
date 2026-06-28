@@ -4,7 +4,7 @@
 
 
 
-//Headers
+//Headers 
     #include <iostream>
     #include <string>
     #include <fstream>
@@ -96,7 +96,7 @@
     //Welcome Banner
     void welcomeBanner()
     {
-        setColor(2);
+        setColor(2); //Green
 
         cout << endl;
         cout << endl;
