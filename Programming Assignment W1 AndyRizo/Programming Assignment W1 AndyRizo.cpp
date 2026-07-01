@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <windows.h>
 
-using namespace std;
+    using namespace std;
 
 // ENUMERATION TYPE FOR TEMPLATE CHOICE
 enum templateType { CHARACTER, LOCATION, CUSTOM, STOP };
@@ -140,18 +140,53 @@ void fileOpen(ofstream& outData)
 
     if (file_choice == "Erase" || file_choice == "erase")
     {
-        outData.open("report.txt");
-        cout << "Creating a new file named: report.txt";
+        setColor(2); //Green
+
+        cout << endl;
+        cout << endl;
+        cout << " __                __ _________  ___         _______    ________       __      __       ________" << endl;
+        cout << " \\ \\      /\\      / / | ______|  | |        |  _____|  |  ____  |     /  \\    /  \\     | _______|" << endl;
+        cout << "  \\ \\    /  \\    / /  | |_____   | |        | |        | |    | |    / /\\ \\  / /\\ \\    | |______" << endl;
+        cout << "   \\ \\  / /\\ \\  / /   | ______|  | |        | |        | |    | |   / /  \\ \\/ /  \\ \\   | _______|" << endl;
+        cout << "    \\ \\/ /  \\ \\/ /    | |_____   | |______  | |_____   | |____| |  / /    \\  /    \\ \\  | |______" << endl;
+        cout << "     \\__/    \\__/     |_______|  |_______|  |_______|  |________| /_/      \\/      \\_\\ |________|" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "This program will allow you to save information to a file, ranging from simple notes to anything you can think of.";
         cout << endl;
         cout << endl;
     }
-    else
+
+
+    //Create new or add to file
+    void fileOpen(ofstream& outData)
     {
-        outData.open("report.txt", ios::app);
-        cout << "Adding to the current file: report.txt";
+        string file_choice = " ";
+
+        cout << "Erase all saved data to create a new file, or keep using the current file?";
         cout << endl;
         cout << endl;
-    }
+        cout << "Type \"erase\" to create a new file, otherwise press the enter key: ";
+        getline(cin, file_choice);
+        cout << endl;
+        cout << endl;
+
+        setColor(2);//Red
+
+        if (file_choice == "Erase" || file_choice == "erase")
+        {
+            outData.open("report.txt");
+            cout << "Creating a new file named: report.txt";
+            cout << endl;
+            cout << endl;
+        }
+        else
+        {
+            outData.open("report.txt", ios::app);
+            cout << "Adding to the current file: report.txt";
+            cout << endl;
+            cout << endl;
+        }
 
     setColor(15);//White
 }
@@ -445,6 +480,121 @@ double averageDescLength(string descriptions[], int amount)
     return static_cast<double>(total) / amount;
 }
 
+    //Template option A: Character/Creature.
+    void characterTemplate(ofstream& outData)
+    {
+        int age_days = 0;
+        int age_months = 0;
+        int age_years = 0;
+
+        int height_feet = 0;
+        int height_inches_remainder = 0;
+
+        double height_centimeters = 0;
+        double weight_kilos = 0;
+
+        setColor(2);
+        cout << "Character template chosen.";
+        setColor(15);
+
+        cout << endl;
+        cout << endl;
+
+        //User Input Name
+        string name = askForName();
+
+        //User Input Catagory
+        string category = askForCategory(name);
+
+        //User Input Age
+        askForAge(name, age_years, age_months, age_days);
+
+        //User Input Height
+        int height_inches = askForHeight(name);
+
+        //User Input Weight
+        double weight_lbs = askForWeight(name);
+
+        //Inches to feet and weight lbs to kg
+        convertMeasurements(height_inches, weight_lbs, height_feet, height_inches_remainder, height_centimeters, weight_kilos);
+
+        //Description
+        string description = askForDescription();
+
+        characterOutput(outData, name, category, age_years, age_months, age_days, height_feet, height_inches_remainder, height_centimeters, weight_lbs, weight_kilos, description);
+    }
+
+
+
+    //Template option B: Location/Places.
+    void locationTemplate(ofstream& outData)
+    {
+        //Display template chosen
+        setColor(2);
+        cout << "Location template chosen. ";
+        setColor(15);
+
+        cout << endl;
+        cout << endl;
+
+        //Name
+        string name = askForName();
+
+        //Catagory
+        string category = askForCategory(name);
+
+        //Description
+        string description = askForDescription();
+
+        locationOutput(outData, name, category, description);
+    }
+
+
+
+    //Template option C: Custom.
+    void customTemplate(ofstream& outData)
+    {
+        string name = " ";
+        //Name of topic as a whole
+        setColor(2);
+        cout << "Custom Note template chosen. No display will be created on the console, only on report.txt";
+        setColor(15);
+
+        cout << endl;
+        cout << endl;
+
+        cout << "Topic name: "; getline(cin, name);
+        cout << endl;
+
+        outData << "\t" << name;
+        outData << endl;
+
+        //This will create description boxes to use
+        textBoxCreator(outData);
+        outData << endl;
+        outData << endl;
+        outData << endl;
+    }
+
+
+
+    //Creates Text Boxes Based On Amount Needed 
+    void textBoxCreator(ofstream& outData)
+    {
+        int amount = 0;
+
+        cout << "How many text sections do you need: ";
+        cin >> amount;
+        cout << endl;
+        if (cin.fail())
+        {
+            do {
+                setColor(4);
+
+                cin.clear();
+                cin.ignore(200, '\n');
+                cout << "Error try again. How many text sections do you need: "; cin >> amount;
+                cout << endl;
 
 
 //Template option A: Character/Creature.
@@ -599,6 +749,14 @@ void textBoxCreator(ofstream& outData)
             cout << "Description cannot be blank: ";
             getline(cin, descriptions[i]);
         }
+    }
+
+
+    //Not needed but may come in use later. Closes the text file.
+    void closeFile(ofstream& outData)
+    {
+        outData.close();
+    }
 
         setColor(15);
 
