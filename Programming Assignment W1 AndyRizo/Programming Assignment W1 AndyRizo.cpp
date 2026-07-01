@@ -11,7 +11,6 @@
 #include <iomanip>
 #include <windows.h>
 
-using namespace std;
 
 // ENUMERATION TYPE FOR TEMPLATE CHOICE
 enum templateType { CHARACTER, LOCATION, CUSTOM, STOP };
@@ -165,6 +164,19 @@ string templateOptions()
 
     setColor(6);
 
+    setColor(15);//White
+}
+
+    setColor(15);
+
+
+//Present the templates available to choose from, asking for variable choice.
+string templateOptions()
+{
+    string templateChoice = " ";
+
+    setColor(6);
+
     cout << "Templates: ( Person / Creature ) = \"a\", ( Location / Place ) = \"b\", ( Custom Note ) = \"c\", or to end the program type \"Stop\"";
     cout << endl;
     cout << endl;
@@ -231,6 +243,9 @@ string askForCategory(string name)
 }
 
 
+    cin.ignore(200, '\n');
+    cout << endl;
+}
 
 //Asks for age, variables: years months and days
 void askForAge(string name, int& age_years, int& age_months, int& age_days)
@@ -248,6 +263,8 @@ void askForAge(string name, int& age_years, int& age_months, int& age_days)
 
         setColor(15);
     }
+    cout << endl;
+    cin.ignore(200, '\n');
 
     cin.ignore(200, '\n');
     cout << endl;
@@ -284,6 +301,8 @@ int askForHeight(string name)
     return height_inches;
 }
 
+    return weight_lbs;
+}
 
 
 //Asks for variable weight
@@ -315,6 +334,8 @@ double askForWeight(string name)
     return weight_lbs;
 }
 
+    return description;
+}
 
 
 //Asks for variable description
@@ -343,7 +364,12 @@ void convertMeasurements(int height_inches, double weight_lbs, int& height_feet,
     weight_kilos = weight_lbs * 0.45359237;
 }
 
+    cout << "\t" << "Height: " << setw(10) << " " << height_feet << "\'" << height_inches_remainder << "\"  or  " << height_centimeters << "cm";
+    cout << endl;
 
+    cout << "\t" << fixed << setprecision(2) << "Weight: " << setw(10) << " " << weight_lbs << "lb  or  " << weight_kilos << "kg";
+    cout << endl;
+    cout << endl;
 
 //Output graph to console and txt file. Option A.
 void characterOutput(ofstream& outData, string name, string category, int age_years, int age_months, int age_days, int height_feet, int height_inches_remainder, double height_centimeters, double weight_lbs, double weight_kilos, string description)
@@ -368,7 +394,12 @@ void characterOutput(ofstream& outData, string name, string category, int age_ye
     cout << endl;
     cout << endl;
 
+    outData << "\t" << "Height: " << setw(10) << " " << height_feet << "\'" << height_inches_remainder << "\"  or  " << height_centimeters << "cm";
+    outData << endl;
 
+    outData << "\t" << fixed << setprecision(2) << "Weight: " << setw(10) << " " << weight_lbs << "lb  or  " << weight_kilos << "kg";
+    outData << endl;
+    outData << endl;
 
     //Text File Output
     outData << "\t" << name << setw(24) << "( " << category << " )";
@@ -391,8 +422,6 @@ void characterOutput(ofstream& outData, string name, string category, int age_ye
     outData << endl;
     outData << endl;
 }
-
-// getline
 
 //Output graph to console and txt file. Option B.
 void locationOutput(ofstream& outData, string name, string category, string description)
@@ -444,6 +473,107 @@ double averageDescLength(string descriptions[], int amount)
 
     return static_cast<double>(total) / amount;
 }
+
+
+
+//Template option A: Character/Creature.
+void characterTemplate(ofstream& outData)
+{
+    int age_days = 0;
+    int age_months = 0;
+    int age_years = 0;
+
+    int height_feet = 0;
+    int height_inches_remainder = 0;
+
+    double height_centimeters = 0;
+    double weight_kilos = 0;
+
+    setColor(2);
+    cout << "Character template chosen.";
+    setColor(15);
+
+    cout << endl;
+    cout << endl;
+
+    //User Input Name
+    string name = askForName();
+
+    //User Input Catagory
+    string category = askForCategory(name);
+
+    //User Input Age
+    askForAge(name, age_years, age_months, age_days);
+
+    //User Input Height
+    int height_inches = askForHeight(name);
+
+    //User Input Weight
+    double weight_lbs = askForWeight(name);
+
+    //Inches to feet and weight lbs to kg
+    convertMeasurements(height_inches, weight_lbs, height_feet, height_inches_remainder, height_centimeters, weight_kilos);
+
+    //Description
+    string description = askForDescription();
+
+    characterOutput(outData, name, category, age_years, age_months, age_days, height_feet, height_inches_remainder, height_centimeters, weight_lbs, weight_kilos, description);
+}
+
+
+
+//Template option B: Location/Places.
+void locationTemplate(ofstream& outData)
+{
+    //Display template chosen
+    setColor(2);
+    cout << "Location template chosen. ";
+    setColor(15);
+
+    cout << endl;
+    cout << endl;
+
+    //Name
+    string name = askForName();
+
+    //Catagory
+    string category = askForCategory(name);
+
+    //Description
+    string description = askForDescription();
+
+    locationOutput(outData, name, category, description);
+}
+
+
+
+//Template option C: Custom.
+void customTemplate(ofstream& outData)
+{
+    string name = " ";
+    //Name of topic as a whole
+    setColor(2);
+    cout << "Custom Note template chosen. No display will be created on the console, only on report.txt";
+    setColor(15);
+
+    cout << endl;
+    cout << endl;
+
+    cin.ignore(200, '\n');
+
+    cout << "Topic name: "; getline(cin, name);
+    cout << endl;
+
+    outData << "\t" << name;
+    outData << endl;
+
+    //This will create description boxes to use
+    textBoxCreator(outData);
+    outData << endl;
+    outData << endl;
+    outData << endl;
+}
+
 
 
 
@@ -640,6 +770,51 @@ void templateCreator(templateType templateChoice,ofstream& outData)
 
 
 //Not needed but may come in use later. Closes the text file made earlier.
+void closeFile(ofstream& outData)
+{
+    outData.close();
+}
+
+        setColor(15);
+
+        cout << endl;
+        cout << endl;
+        cout << endl;
+    }
+
+    //Output to text File
+    outputCustom(categories, descriptions, amount, outData);
+    cout << endl;
+    cout << "Average description length: " << averageDescLength(descriptions, amount) << " characters." << endl;
+    outData << endl;
+}
+
+
+
+//A switch statement that uses inputs to fill out the templates chosen earlier.
+void templateCreator(templateType templateChoice,ofstream& outData)
+{
+    switch (templateChoice)
+    {
+    case CHARACTER:
+        characterTemplate(outData);
+        break;
+
+    case LOCATION:
+        locationTemplate(outData);
+        break;
+
+    case CUSTOM:
+        customTemplate(outData);
+        break;
+
+    case STOP:
+        break;
+    }
+}
+
+
+//Not needed but may come in use later. Closes the text file.
 void closeFile(ofstream& outData)
 {
     outData.close();
