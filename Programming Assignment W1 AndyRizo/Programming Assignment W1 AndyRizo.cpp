@@ -1,8 +1,5 @@
-
-
 // Andy Rizo     Course : ITCS - 2530     Programming Assignment    Part 6  
-// Deven Shumney - CHANGES/COMMENTS MADE FOR WEEK 06 PROGRAMMING ASSIGNMENT
-
+// Deven Shumney - CHANGES/COMMENTS MADE FOR WEEK 07 PROGRAMMING ASSIGNMENT
 
 //Headers 
 #include <iostream>
@@ -13,9 +10,15 @@
 
 using namespace std;
 
-// ENUMERATION TYPE FOR TEMPLATE CHOICE
+// Enumeration type for template choice
 enum templateType { CHARACTER, LOCATION, CUSTOM, STOP };
 
+// CUSTOM TEMPLATE STRUCT
+struct CustomNote {
+
+    string category;
+    string description;
+};
 
 //Prototypes in order
 void setColor(int color);
@@ -24,13 +27,10 @@ void fileOpen(ofstream& outData);
 
 void closeFile(ofstream& outData);
 
-
 void welcomeBanner();
-
 
 string templateOptions();
 templateType getTemplateChoice(string templateChoice);
-
 
 string askForName();
 
@@ -46,20 +46,19 @@ string askForDescription();
 
 void convertMeasurements(int inches, double weight_lbs, int& height_feet, int& height_inches_remainder, double& height_centimeters, double& weight_kilos);
 
-
-
 void characterOutput(ofstream& outData, string name, string category, int age_years, int age_months, int age_days, int height_feet, int height_inches_remainder, double height_centimeters, double weight_lbs, double weight_kilos, string description);
 
 void locationOutput(ofstream& outData, string name, string category, string description);
 
-void outputCustom(string categories[], string descriptions[], int amount, ofstream& outData);
+//void outputCustom(string categories[], string descriptions[], int amount, ofstream& outData);
+// UPDATE FUNCTION PROTOTYPE
+void outputCustom(CustomNote sections[], int amount, ofstream& outData);
 
-double averageDescLength(string descriptions[],
-    int amount);
+//double averageDescLength(string descriptions[], int amount);
+// UPDATE FUNCITON PROTOTYPE
+double averageDescLength(CustomNote sections[], int amount);
 
 void textBoxCreator(ofstream& outdata);
-
-
 
 void characterTemplate(ofstream& outData);
 
@@ -69,12 +68,7 @@ void customTemplate(ofstream& outData);
 
 void templateCreator(templateType templateChoice, ofstream& outData);
 
-
-
 void mainMenu(ofstream& outData);
-
-
-
 
 //Main program
 int main()
@@ -94,7 +88,6 @@ int main()
 }
 
 //Definitions Below
-
 //Color for console text
 void setColor(int color)
 {
@@ -156,8 +149,6 @@ void fileOpen(ofstream& outData)
     setColor(15);//White
 }
 
-
-
 //Present the templates available to choose from, asking for variable choice.
 string templateOptions()
 {
@@ -188,7 +179,6 @@ string templateOptions()
     return templateChoice;
 }
 
-
 //Converts uppercase strings to lowercase for switch statement later on
 templateType getTemplateChoice(string templateChoice)
 {
@@ -216,21 +206,17 @@ string askForName()
     return name;
 }
 
-
-
 //Asks for variable catagory
 string askForCategory(string name)
 {
 
     string category = " ";
 
-    cout << "What would " << name << " be categorized as: "; getline(cin, category);// CATEGORY AT ARRAY INDEX 0
+    cout << "What would " << name << " be categorized as: "; getline(cin, category);// category at array index 0
     cout << endl;
 
     return category;
 }
-
-
 
 //Asks for age, variables: years months and days
 void askForAge(string name, int& age_years, int& age_months, int& age_days)
@@ -252,8 +238,6 @@ void askForAge(string name, int& age_years, int& age_months, int& age_days)
     cin.ignore(200, '\n');
     cout << endl;
 }
-
-
 
 //Asks for variable height
 int askForHeight(string name)
@@ -284,8 +268,6 @@ int askForHeight(string name)
     return height_inches;
 }
 
-
-
 //Asks for variable weight
 double askForWeight(string name)
 {
@@ -315,23 +297,19 @@ double askForWeight(string name)
     return weight_lbs;
 }
 
-
-
 //Asks for variable description
-string  askForDescription()
+string askForDescription()
 {
     string description = " ";
 
     cout << "Description: ";
-    getline(cin, description); // DESCRIPTION AT ARRAY INDEX 0
+    getline(cin, description); // Description at array index 0
     cout << endl;
     cout << endl;
     cout << endl;
 
     return description;
 }
-
-
 
 //Height and Weight convertor
 void convertMeasurements(int height_inches, double weight_lbs, int& height_feet, int& height_inches_remainder, double& height_centimeters, double& weight_kilos)
@@ -342,8 +320,6 @@ void convertMeasurements(int height_inches, double weight_lbs, int& height_feet,
 
     weight_kilos = weight_lbs * 0.45359237;
 }
-
-
 
 //Output graph to console and txt file. Option A.
 void characterOutput(ofstream& outData, string name, string category, int age_years, int age_months, int age_days, int height_feet, int height_inches_remainder, double height_centimeters, double weight_lbs, double weight_kilos, string description)
@@ -367,8 +343,6 @@ void characterOutput(ofstream& outData, string name, string category, int age_ye
     cout << endl;
     cout << endl;
     cout << endl;
-
-
 
     //Text File Output
     outData << "\t" << name << setw(24) << "( " << category << " )";
@@ -418,34 +392,35 @@ void locationOutput(ofstream& outData, string name, string category, string desc
     outData << endl;
 }
 
-
-//OUTPUTS TO TEXT FILE USING CUSTOM TEMPLATE
-void outputCustom(string categories[], string descriptions[], int amount, ofstream& outData)
+// Outputs to text file using custom template
+// CHANGE ARRAYS TO STRUCT OF ARRAYS
+void outputCustom(CustomNote sections[], int amount, ofstream& outData)
 {
     for (int i = 0;i < amount;i++)
     {
-        outData << categories[i]
+        outData << sections[i].category // ACCESS CATEGORY MEMBER
             << ": "
-            << descriptions[i]
+            << sections[i].description // ACCESS DESCRIPTION MEMBER
             << endl;
     }
 }
 
-//GIVES A DESCRIPTION
-double averageDescLength(string descriptions[], int amount)
+// Gives a description
+// CHANGE ARRAY TO ARRAY OF STRUCTS
+double averageDescLength(CustomNote sections[], int amount)
 {
     int total = 0;
 
-    for (int i = 0;i < amount;i++)
-        total += descriptions[i].length();
+    for (int i = 0;i < amount;i++) {
+
+        total += sections[i].description.length(); // ACCESS DESCRIPTION MEMBER
+    }
 
     if (amount == 0)
         return 0;
 
     return static_cast<double>(total) / amount;
 }
-
-
 
 //Template option A: Character/Creature.
 void characterTemplate(ofstream& outData)
@@ -491,8 +466,6 @@ void characterTemplate(ofstream& outData)
     characterOutput(outData, name, category, age_years, age_months, age_days, height_feet, height_inches_remainder, height_centimeters, weight_lbs, weight_kilos, description);
 }
 
-
-
 //Template option B: Location/Places.
 void locationTemplate(ofstream& outData)
 {
@@ -515,8 +488,6 @@ void locationTemplate(ofstream& outData)
 
     locationOutput(outData, name, category, description);
 }
-
-
 
 //Template option C: Custom.
 void customTemplate(ofstream& outData)
@@ -545,16 +516,15 @@ void customTemplate(ofstream& outData)
     outData << endl;
 }
 
-
-
 //Creates Text Boxes Based On Amount Needed 
+// REPLACE ARRAYS WITH ARRAY OF STRUCTS
 void textBoxCreator(ofstream& outData)
 {
     int amount = 0;
 
-    string categories[10];
-    string descriptions[10];
-
+    //string categories[10];
+    //string descriptions[10];
+    CustomNote sections[10]; // DECLARE ARRAY OF STRUCTS
 
     cout << "How many text sections do you need: ";
     cin >> amount;
@@ -579,42 +549,40 @@ void textBoxCreator(ofstream& outData)
     for (int i = 0;i < amount;i++)
     {
 
-        cout << "Category: "; getline(cin, categories[i]);
+        cout << "Category: "; getline(cin, sections[i].category); // STORE INPUT FOR CATEGORY MEMBER
 
-        while (categories[i].empty())
+        while (sections[i].category.empty())
         {
             setColor(4);
             cout << "Category cannot be blank: ";
-            getline(cin, categories[i]);
+            getline(cin, sections[i].category);
         }
 
         setColor(15);
 
         cout << endl;
-        cout << "Description: "; getline(cin, descriptions[i]);
+        cout << "Description: "; getline(cin, sections[i].description); // STORE INPUT FOR DESCRIPTION MEMBER
 
-        while (descriptions[i].empty())
+        while (sections[i].description.empty())
         {
             setColor(4);
             cout << "Description cannot be blank: ";
-            getline(cin, descriptions[i]);
+            getline(cin, sections[i].description);
         }
 
         setColor(15);
 
-        cout << endl;
-        cout << endl;
-        cout << endl;
+        cout << endl << endl;
+        //cout << endl;
+        //cout << endl;
     }
 
     //Output to text File
-    outputCustom(categories, descriptions, amount, outData);
+    outputCustom(sections, amount, outData);
     cout << endl;
-    cout << "Average description length: " << averageDescLength(descriptions, amount) << " characters." << endl;
+    cout << "Average description length: " << averageDescLength(sections, amount) << " characters." << endl;
     outData << endl;
 }
-
-
 
 //A switch statement that uses inputs to fill out the templates chosen earlier.
 void templateCreator(templateType templateChoice,ofstream& outData)
@@ -637,7 +605,6 @@ void templateCreator(templateType templateChoice,ofstream& outData)
         break;
     }
 }
-
 
 //Not needed but may come in use later. Closes the text file made earlier.
 void closeFile(ofstream& outData)
@@ -665,7 +632,3 @@ void mainMenu(ofstream& outData)
 
     } while (templateChoice != "Stop" && templateChoice != "stop");
 }
-
-
-
-
