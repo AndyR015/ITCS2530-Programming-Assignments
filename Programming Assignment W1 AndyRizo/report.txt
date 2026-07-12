@@ -1,8 +1,3 @@
 	Dinosaurs
 Brontosaurus: A long-necked sauropod
-Tyrannosaurus: A sharp-toothed savage
-Triceratops: A three-horned herbivore
-
-
-
-
+Tyrannosaurus: A sharp-toothed beast

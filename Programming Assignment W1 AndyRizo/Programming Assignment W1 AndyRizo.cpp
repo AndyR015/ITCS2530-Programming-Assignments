@@ -1,5 +1,5 @@
 // Andy Rizo     Course : ITCS - 2530     Programming Assignment    Part 6  
-// Deven Shumney - CHANGES/COMMENTS MADE FOR WEEK 07 PROGRAMMING ASSIGNMENT
+// Deven Shumney - CHANGES/COMMENTS MADE FOR WEEK 08 PROGRAMMING ASSIGNMENT
 
 //Headers 
 #include <iostream>
@@ -13,81 +13,128 @@ using namespace std;
 // Enumeration type for template choice
 enum templateType { CHARACTER, LOCATION, CUSTOM, STOP };
 
-// CUSTOM TEMPLATE STRUCT
+// Custom template struct
 struct CustomNote {
 
     string category;
     string description;
 };
 
-//Prototypes in order
+// CUSTOM TEMPLATE CLASS
+class CustomNoteManager {
+
+private:
+    CustomNote sections[10];
+    int amount;
+
+public:
+    CustomNoteManager();
+
+    void addSections();
+    void outputCustom(ofstream& outdata) const;
+    double averageDescLength() const;
+};
+
+// FUNCTION PROTOTYPE
 void setColor(int color);
 
-void fileOpen(ofstream& outData);
+// DEFINE CUSTOMNOTEMANAGER MEMBER FUNCTIONS
+// CONSTRUCTOR
+CustomNoteManager::CustomNoteManager() {
 
-void closeFile(ofstream& outData);
-
-void welcomeBanner();
-
-string templateOptions();
-templateType getTemplateChoice(string templateChoice);
-
-string askForName();
-
-string askForCategory(string name);
-
-void askForAge(string name, int& age_years, int& age_months, int& age_days);
-
-int askForHeight(string name);
-
-double askForWeight(string name);
-
-string askForDescription();
-
-void convertMeasurements(int inches, double weight_lbs, int& height_feet, int& height_inches_remainder, double& height_centimeters, double& weight_kilos);
-
-void characterOutput(ofstream& outData, string name, string category, int age_years, int age_months, int age_days, int height_feet, int height_inches_remainder, double height_centimeters, double weight_lbs, double weight_kilos, string description);
-
-void locationOutput(ofstream& outData, string name, string category, string description);
-
-//void outputCustom(string categories[], string descriptions[], int amount, ofstream& outData);
-// UPDATE FUNCTION PROTOTYPE
-void outputCustom(CustomNote sections[], int amount, ofstream& outData);
-
-//double averageDescLength(string descriptions[], int amount);
-// UPDATE FUNCITON PROTOTYPE
-double averageDescLength(CustomNote sections[], int amount);
-
-void textBoxCreator(ofstream& outdata);
-
-void characterTemplate(ofstream& outData);
-
-void locationTemplate(ofstream& outData);
-
-void customTemplate(ofstream& outData);
-
-void templateCreator(templateType templateChoice, ofstream& outData);
-
-void mainMenu(ofstream& outData);
-
-//Main program
-int main()
-{
-
-    ofstream outData;
-
-    welcomeBanner();
-
-    fileOpen(outData);
-
-    mainMenu(outData);
-
-    closeFile(outData);
-
-    return 0;
+    amount = 0;
 }
 
-//Definitions Below
+//Creates Text Boxes Based On Amount Needed
+// CHANGED TO MEMBER FUNCTION FOR CUSTOMNOTEMANAGER CLASS
+void CustomNoteManager::addSections()
+{
+
+    cout << "How many text sections do you need: ";
+    cin >> amount;
+
+    while (cin.fail() || amount < 1 || amount > 10)
+    {
+        setColor(4);
+
+        cin.clear();
+        cin.ignore(200, '\n');
+
+        cout << "Please enter a number between 1 and 10: ";
+        cin >> amount;
+    }
+
+    setColor(15);
+    cout << endl;
+
+    cin.ignore(200, '\n');
+
+    //Depending on the amount of description boxes chosen, this will create one each repition.
+    for (int i = 0;i < amount;i++)
+    {
+
+        cout << "Category: "; getline(cin, sections[i].category); // Store input for category member
+
+        while (sections[i].category.empty())
+        {
+            setColor(4);
+            cout << "Category cannot be blank: ";
+            getline(cin, sections[i].category);
+        }
+
+        setColor(15);
+
+        cout << endl;
+        cout << "Description: "; getline(cin, sections[i].description); // Store input for description member
+
+        while (sections[i].description.empty())
+        {
+            setColor(4);
+            cout << "Description cannot be blank: ";
+            getline(cin, sections[i].description);
+        }
+
+        setColor(15);
+
+        cout << endl << endl;
+    }
+
+    cout << "Average description length: " << averageDescLength() << " characters." << endl;
+}
+
+// Outputs to text file using custom template
+// CHANGED TO MEMBER FUNCTION FOR CUSTOMNOTEMANAGER CLASS
+void CustomNoteManager::outputCustom(ofstream& outData) const
+{
+    for (int i = 0;i < amount;i++)
+    {
+        outData << sections[i].category // Access category member
+            << ": "
+            << sections[i].description // Access description member
+            << endl;
+    }
+
+    cout << endl << "Note saved successfully!" << endl << endl;
+}
+
+// Gives a description length
+// CHANGED TO MEMBER FUNCTION FOR CUSTOMNOTEMANAGER CLASS
+double CustomNoteManager::averageDescLength() const
+{
+    int total = 0;
+
+    for (int i = 0;i < amount;i++) {
+
+        total += sections[i].description.length(); // Access description member
+    }
+
+    if (amount == 0)
+        return 0;
+
+    return static_cast<double>(total) / amount;
+}
+
+// DEFINE FUNCTIONS
 //Color for console text
 void setColor(int color)
 {
@@ -212,7 +259,7 @@ string askForCategory(string name)
 
     string category = " ";
 
-    cout << "What would " << name << " be categorized as: "; getline(cin, category);// category at array index 0
+    cout << "What would " << name << " be categorized as: "; getline(cin, category);
     cout << endl;
 
     return category;
@@ -303,7 +350,7 @@ string askForDescription()
     string description = " ";
 
     cout << "Description: ";
-    getline(cin, description); // Description at array index 0
+    getline(cin, description);
     cout << endl;
     cout << endl;
     cout << endl;
@@ -390,36 +437,6 @@ void locationOutput(ofstream& outData, string name, string category, string desc
     outData << endl;
     outData << endl;
     outData << endl;
-}
-
-// Outputs to text file using custom template
-// CHANGE ARRAYS TO STRUCT OF ARRAYS
-void outputCustom(CustomNote sections[], int amount, ofstream& outData)
-{
-    for (int i = 0;i < amount;i++)
-    {
-        outData << sections[i].category // ACCESS CATEGORY MEMBER
-            << ": "
-            << sections[i].description // ACCESS DESCRIPTION MEMBER
-            << endl;
-    }
-}
-
-// Gives a description
-// CHANGE ARRAY TO ARRAY OF STRUCTS
-double averageDescLength(CustomNote sections[], int amount)
-{
-    int total = 0;
-
-    for (int i = 0;i < amount;i++) {
-
-        total += sections[i].description.length(); // ACCESS DESCRIPTION MEMBER
-    }
-
-    if (amount == 0)
-        return 0;
-
-    return static_cast<double>(total) / amount;
 }
 
 //Template option A: Character/Creature.
@@ -510,82 +527,15 @@ void customTemplate(ofstream& outData)
     outData << endl;
 
     //This will create description boxes to use
-    textBoxCreator(outData);
-    outData << endl;
-    outData << endl;
-    outData << endl;
-}
+    // CHANGE TO CUSTOMNOTEMANAGER 
+    CustomNoteManager manager;
+    manager.addSections();
+    manager.outputCustom(outData);
 
-//Creates Text Boxes Based On Amount Needed 
-// REPLACE ARRAYS WITH ARRAY OF STRUCTS
-void textBoxCreator(ofstream& outData)
-{
-    int amount = 0;
-
-    //string categories[10];
-    //string descriptions[10];
-    CustomNote sections[10]; // DECLARE ARRAY OF STRUCTS
-
-    cout << "How many text sections do you need: ";
-    cin >> amount;
-
-    while (cin.fail() || amount < 1 || amount > 10)
-    {
-        setColor(4);
-
-        cin.clear();
-        cin.ignore(200, '\n');
-
-        cout << "Please enter a number between 1 and 10: ";
-        cin >> amount;
-    }
-
-    setColor(15);
-    cout << endl;
-
-    cin.ignore(200, '\n');
-
-    //Depending on the amount of description boxes chosen, this will create one each repition.
-    for (int i = 0;i < amount;i++)
-    {
-
-        cout << "Category: "; getline(cin, sections[i].category); // STORE INPUT FOR CATEGORY MEMBER
-
-        while (sections[i].category.empty())
-        {
-            setColor(4);
-            cout << "Category cannot be blank: ";
-            getline(cin, sections[i].category);
-        }
-
-        setColor(15);
-
-        cout << endl;
-        cout << "Description: "; getline(cin, sections[i].description); // STORE INPUT FOR DESCRIPTION MEMBER
-
-        while (sections[i].description.empty())
-        {
-            setColor(4);
-            cout << "Description cannot be blank: ";
-            getline(cin, sections[i].description);
-        }
-
-        setColor(15);
-
-        cout << endl << endl;
-        //cout << endl;
-        //cout << endl;
-    }
-
-    //Output to text File
-    outputCustom(sections, amount, outData);
-    cout << endl;
-    cout << "Average description length: " << averageDescLength(sections, amount) << " characters." << endl;
-    outData << endl;
 }
 
 //A switch statement that uses inputs to fill out the templates chosen earlier.
-void templateCreator(templateType templateChoice,ofstream& outData)
+void templateCreator(templateType templateChoice, ofstream& outData)
 {
     switch (templateChoice)
     {
@@ -631,4 +581,21 @@ void mainMenu(ofstream& outData)
         templateCreator(output, outData);
 
     } while (templateChoice != "Stop" && templateChoice != "stop");
+}
+
+// DEFINE MAIN
+int main()
+{
+
+    ofstream outData;
+
+    welcomeBanner();
+
+    fileOpen(outData);
+
+    mainMenu(outData);
+
+    closeFile(outData);
+
+    return 0;
 }
